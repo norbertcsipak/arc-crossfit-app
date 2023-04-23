@@ -1,47 +1,44 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
-#   Character.create(name: "Luke", movie: movies.first)
-Workout.delete_all
-Member.delete_all
-Dashboard.delete_all
+require 'csv'
 
-puts "creating members..."
+member_csv = File.read(Rails.root.join('db', 'csv_seed', 'member.csv'))
 
-member1 = Member.new(
-  id: 1,
-  email: "ange@test.com",
-  first_name: "Angee",
-  last_name: "Otic",
-  BIO: "Hellow, I enjoy working out",
-  DOB: "29-05-1995",
-  password: "seeded1"
-)
+# MEMBERS
+p "creating "
+member_csv_data = CSV.parse(member_csv, headers: true, encoding: 'ISO-8859-1')
+counter = 0
+member_csv_data.each do |row|
+  u = Member.create!(
+    first_name: row['first_name'],
+    last_name: row['last_name'],
+    BIO: row['BIO'],
+    email: row['email'],
+    password: "123456"
+  )
+  counter += 1 if u.persisted?
+  print "."
+end
 
-member1.save
+p ""
+p ">>> #{counter} #{'member'.pluralize(counter)} generated"
 
-puts "created #{member1}!!"
 
-workout1 = Workout.new(
-  id: 1,
-  name: "angee",
-  description: "as many reps a possible"
-)
+# workout1 = Workout.new(
+#   id: 1,
+#   name: "angee",
+#   description: "as many reps a possible"
+# )
 
-workout1.save
+# workout1.save
 
-puts "created #{workout1}!!"
+# puts "created #{workout1}!!"
 
-dash1 = Dashboard.new(
-  id: 1,
-  score: "nil"
-)
+# dash1 = Dashboard.new(
+#   id: 1,
+#   score: "nil"
+# )
 
-dash1.save!
+# dash1.save!
 
-# dash1.create(workout1)
+# # dash1.create(workout1)
 
-puts "created #{dash1}!!"
+# puts "created #{dash1}!!"
