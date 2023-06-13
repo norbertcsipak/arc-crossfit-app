@@ -3,6 +3,11 @@ class Member < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
-  belongs_to :dashboard
-  has_many :workouts, through: :dashboard
+
+  has_and_belongs_to_many :workouts
+
+  # belongs_to :dashboard
+  # has_many :workouts, through: :dashboard
+  # validates :password, presence: true
+  has_one :dashboard
 end
